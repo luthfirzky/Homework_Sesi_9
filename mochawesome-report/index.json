@@ -1,0 +1,142 @@
+{
+  "stats": {
+    "suites": 2,
+    "tests": 2,
+    "passes": 2,
+    "pending": 0,
+    "failures": 0,
+    "start": "2026-08-24T03:16:12.027Z",
+    "end": "2026-08-24T03:16:31.551Z",
+    "duration": 19524,
+    "testsRegistered": 2,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "dc2b60ea-65c3-4d57-9355-8501a3464973",
+      "title": "",
+      "fullFile": "",
+      "file": "",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "c2ac5850-ec12-41b6-94dc-2d04ed70650c",
+          "title": "Add User Feature",
+          "fullFile": "/Users/luthfirizky/Documents/Coding/belajar-qa-automation/Homework_Sesi_9/Automation/addUser.js",
+          "file": "/Automation/addUser.js",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "Add User Success",
+              "fullTitle": "Add User Feature Add User Success",
+              "timedOut": false,
+              "duration": 12238,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "const driver = await new Builder().forBrowser(\"chrome\").build();\nconst newName = \"Luthfiy\";\nconst newAge = \"27\";\n// Sign in\nawait driver.get(\"https://belajar-bareng.onrender.com/\");\nlet usernameInput = await driver.wait(\n  until.elementLocated(By.xpath(\"//input[@data-testid='username-input']\")),\n  10000\n);\nlet passwordInput = await driver.findElement(\n  By.xpath(\"//input[@data-testid='password-input']\")\n);\nlet signinButton = await driver.findElement(\n  By.xpath(\"//button[@data-testid='login-button']\")\n);\nawait usernameInput.sendKeys(\"admin\");\nawait passwordInput.sendKeys(\"admin\");\nawait signinButton.click();\n// Assertion Sign in\nlet listUsersHeader = await driver.wait(\n  until.elementLocated(By.xpath(\"//h2[contains(text(), 'List Users')]\")),\n  10000\n);\nconst headerText = await listUsersHeader.getText();\nassert.equal(headerText, \"List Users\", \"Teks header tidak sesuai!\");\n// Add User\nlet addButton = await driver.wait(\n  until.elementLocated(By.xpath(\"//button[@data-testid='add-button']\")),\n  10000\n);\nawait addButton.click();\nlet nameInput = await driver.wait(\n  until.elementLocated(By.xpath(\"//*[@id='app']/div/div/form/input[1]\")),\n  10000\n);\nlet ageInput = await driver.findElement(\n  By.xpath(\"//input[@data-testid='age-input']\")\n);\nawait nameInput.sendKeys(newName);\nawait ageInput.sendKeys(newAge);\nlet submitButton = await driver.findElement(\n  By.xpath(\"//button[@data-testid='submit-button']\")\n);\nawait submitButton.click();\nawait driver.sleep(2000);\n// Assertion\nlet newUserCard = await driver.wait(\n  until.elementLocated(By.xpath(`//*[contains(text(), '${newName}')]`)),\n  15000\n);\nconst addedNameText = await newUserCard.getText();\nassert.equal(\n  addedNameText.includes(newName),\n  true,\n  `User ${newName} gagal ditambahkan ke dalam List Users!`\n);\nawait driver.quit();",
+              "err": {},
+              "uuid": "f6f0fd33-69e5-4e14-b837-3de2a662d642",
+              "parentUUID": "c2ac5850-ec12-41b6-94dc-2d04ed70650c",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "f6f0fd33-69e5-4e14-b837-3de2a662d642"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 12238,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 40000
+        },
+        {
+          "uuid": "f5623fe5-3c47-42b1-b5cf-f053bdc9e48d",
+          "title": "Sign in Feature",
+          "fullFile": "/Users/luthfirizky/Documents/Coding/belajar-qa-automation/Homework_Sesi_9/Automation/login.js",
+          "file": "/Automation/login.js",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "Sign in Success",
+              "fullTitle": "Sign in Feature Sign in Success",
+              "timedOut": false,
+              "duration": 7274,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "const driver = await new Builder().forBrowser(\"chrome\").build();\nawait driver.get(\"https://belajar-bareng.onrender.com/\");\nlet usernameInput = await driver.findElement(\n  By.xpath(\"//input[@data-testid='username-input']\")\n);\nlet passwordInput = await driver.findElement(\n  By.xpath(\"//input[@data-testid='password-input']\")\n);\nlet signinButton = await driver.findElement(\n  By.xpath(\"//button[@data-testid='login-button']\")\n);\nawait usernameInput.sendKeys(\"admin\");\nawait passwordInput.sendKeys(\"admin\");\nawait signinButton.click();\n// Assertion\nlet listUsersHeader = await driver.wait(\n  until.elementLocated(By.xpath(\"//h2[contains(text(), 'List Users')]\")),\n  30000\n);\nconst headerText = await listUsersHeader.getText();\nassert.equal(headerText, \"List Users\", \"Teks header tidak sesuai!\");\nawait driver.quit();",
+              "err": {},
+              "uuid": "b97159bf-3e45-47bf-bf2f-5fbb625cd715",
+              "parentUUID": "f5623fe5-3c47-42b1-b5cf-f053bdc9e48d",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "b97159bf-3e45-47bf-bf2f-5fbb625cd715"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 7274,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 30000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 30000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "11.8.0"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "index",
+        "saveHtml": true,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "8.0.1"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "mochawesome-report",
+        "reportFilename": "index"
+      },
+      "version": "6.3.2"
+    }
+  }
+}

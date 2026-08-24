@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "mocha Automation/*.js --timeout 30000"
+    "test": "mocha Automation/*.js --timeout 30000 --reporter mochawesome --reporter-options reportDir=mochawesome-report,reportFilename=index"
   },
   "keywords": [],
   "author": "",
