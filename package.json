@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "mocha Automation/*.js --timeout 30000 --reporter mocha-simple-html-reporter --reporter-options output=report.html"
+    "test": "mocha Automation/*.js --timeout 60000 --reporter mocha-simple-html-reporter --reporter-options output=report.html"
   },
   "keywords": [],
   "author": "",

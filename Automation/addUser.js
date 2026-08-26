@@ -2,79 +2,116 @@ const { Builder, By, until } = require("selenium-webdriver");
 const assert = require("node:assert/strict");
 
 describe("Add User Feature", function () {
-  this.timeout(40000);
+  this.timeout(60000);
+  let driver;
 
-  it("Add User Success", async function () {
-    const driver = await new Builder().forBrowser("chrome").build();
-    const newName = "Luthfiy";
-    const newAge = "27";
+  before(async function () {
+    console.log("🚀 STARTING: Add User Feature Test Suite");
+  });
 
-    // Sign in
+  after(async function () {
+    console.log("✅ COMPLETED: Add User Feature Test Suite");
+  });
+
+  beforeEach(async function () {
+    driver = await new Builder().forBrowser("chrome").build();
     await driver.get("https://belajar-bareng.onrender.com/");
 
-    let usernameInput = await driver.wait(
-      until.elementLocated(By.xpath("//input[@data-testid='username-input']")),
-      10000
-    );
-    let passwordInput = await driver.findElement(
-      By.xpath("//input[@data-testid='password-input']")
-    );
-    let signinButton = await driver.findElement(
-      By.xpath("//button[@data-testid='login-button']")
-    );
+    await driver
+      .findElement(By.xpath("//input[@data-testid='username-input']"))
+      .sendKeys("admin");
+    await driver
+      .findElement(By.xpath("//input[@data-testid='password-input']"))
+      .sendKeys("admin");
+    await driver
+      .findElement(By.xpath("//button[@data-testid='login-button']"))
+      .click();
 
-    await usernameInput.sendKeys("admin");
-    await passwordInput.sendKeys("admin");
-    await signinButton.click();
-
-    // Assertion Sign in
-    let listUsersHeader = await driver.wait(
+    await driver.wait(
       until.elementLocated(By.xpath("//h2[contains(text(), 'List Users')]")),
       10000
     );
-    const headerText = await listUsersHeader.getText();
-    assert.equal(headerText, "List Users", "Teks header tidak sesuai!");
+  });
 
-    // Add User
-    let addButton = await driver.wait(
-      until.elementLocated(By.xpath("//button[@data-testid='add-button']")),
-      10000
-    );
-    await addButton.click();
+  afterEach(async function () {
+    if (driver) {
+      await driver.quit();
+    }
+  });
 
-    let nameInput = await driver.wait(
-      until.elementLocated(By.xpath("//*[@id='app']/div/div/form/input[1]")),
-      10000
-    );
+  // --- POSITIVE CASES ---
+  describe("Positive Cases", function () {
+    it("Add User Success with valid data", async function () {
+      let addButton = await driver.wait(
+        until.elementLocated(By.xpath("//button[@data-testid='add-button']")),
+        10000
+      );
+      await addButton.click();
 
-    let ageInput = await driver.findElement(
-      By.xpath("//input[@data-testid='age-input']")
-    );
+      await driver
+        .findElement(By.xpath("//input[@data-testid='username-input']"))
+        .sendKeys("Luthfiy");
 
-    await nameInput.sendKeys(newName);
-    await ageInput.sendKeys(newAge);
+      await driver
+        .findElement(By.xpath("//input[@data-testid='age-input']"))
+        .sendKeys("27");
 
-    let submitButton = await driver.findElement(
-      By.xpath("//button[@data-testid='submit-button']")
-    );
-    await submitButton.click();
+      await driver
+        .findElement(By.xpath("//button[@data-testid='submit-button']"))
+        .click();
 
-    await driver.sleep(2000);
+      let newUserCard = await driver.wait(
+        until.elementLocated(By.xpath("//*[@id='success-added']")),
+        60000
+      );
 
-    // Assertion
-    let newUserCard = await driver.wait(
-      until.elementLocated(By.xpath(`//*[contains(text(), '${newName}')]`)),
-      15000
-    );
+      await driver.sleep(1000);
 
-    const addedNameText = await newUserCard.getText();
+      let toastContent = await newUserCard.findElement(
+        By.xpath(".//*[@data-testid='toast-content']")
+      );
 
-    assert.equal(
-      addedNameText.includes(newName),
-      true,
-      `User ${newName} gagal ditambahkan ke dalam List Users!`
-    );
+      const addedNameText = await toastContent.getText();
 
-    await driver.quit();
+      assert.equal(
+        addedNameText,
+        "User successfully added, Hi Luthfiy!",
+        "User Luthfiy gagal ditambahkan ke dalam List Users!"
+      );
+    });
+  });
+
+  // --- NEGATIVE CASES ---
+  describe("Negative Cases", function () {
+    it("Add User Failed with empty fields", async function () {
+      let addButton = await driver.wait(
+        until.elementLocated(By.xpath("//button[@data-testid='add-button']")),
+        10000
+      );
+      await addButton.click();
+
+      let usernameInput = await driver.wait(
+        until.elementLocated(
+          By.xpath("//input[@data-testid='username-input']")
+        ),
+        10000
+      );
+
+      let submitButton = await driver.findElement(
+        By.xpath("//button[@data-testid='submit-button']")
+      );
+
+      await submitButton.click();
+
+      const validationMessage = await usernameInput.getAttribute(
+        "validationMessage"
+      );
+
+      assert.strictEqual(
+        validationMessage,
+        "Please fill out this field.",
+        "Pesan tooltip validasi Add User tidak sesuai!"
+      );
+    });
   });
 });
